@@ -1,0 +1,38 @@
+{% extends 'polls/base.html' %}
+{% load poll_extras %}
+
+{% block title %}Результаты опроса{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Результаты: {{ question.question_text }}</h2>
+
+<ul class="list-group mb-4">
+    {% for choice in choices %}
+        {% with percentage=choice.votes|div:total_votes|mul:100 %}
+        <li class="list-group-item">
+            <div class="d-flex justify-content-between">
+                <strong>{{ choice.choice_text }}</strong>
+                <span class="text-muted">{{ choice.votes }} голос(ов)</span>
+            </div>
+            <div class="progress mt-2" role="progressbar">
+                <div class="progress-bar bg-info" style="width: {{ percentage|floatformat:2 }}%;">
+                    {{ percentage|floatformat:2 }}%
+                </div>
+            </div>
+        </li>
+        {% endwith %}
+    {% endfor %}
+</ul>
+<h4 class="mt-4">Кто как голосовал:</h4>
+<ul class="list-group">
+    {% for vote in question.vote_set.all %}
+        <li class="list-group-item">
+            {{ vote.user.username }} — <strong>{{ vote.choice.choice_text }}</strong>
+        </li>
+    {% empty %}
+        <li class="list-group-item text-muted">Пока никто не голосовал</li>
+    {% endfor %}
+</ul>
+<p><strong>Всего голосов:</strong> {{ total_votes }}</p>
+<a href="{% url 'polls:index' %}" class="btn btn-secondary">← Назад к опросам</a>
+{% endblock %}

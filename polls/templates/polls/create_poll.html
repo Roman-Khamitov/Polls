@@ -1,0 +1,65 @@
+{% extends 'polls/base.html' %}
+
+{% block title %}Создать опрос{% endblock %}
+
+{% block content %}
+<h2>Создание нового опроса</h2>
+
+<form method="post">
+    {% csrf_token %}
+    
+    <div class="mb-3">
+        <label for="id_question_text" class="form-label">Вопрос</label>
+        {{ question_form.question_text }}
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Варианты ответов</label>
+        <div id="choice-fields">
+            <div class="input-group mb-2">
+                <input type="text" name="choices" class="form-control" placeholder="Вариант ответа">
+                <button type="button" class="btn btn-danger remove-choice">✖</button>
+            </div>
+            <div class="input-group mb-2">
+                <input type="text" name="choices" class="form-control" placeholder="Вариант ответа">
+                <button type="button" class="btn btn-danger remove-choice">✖</button>
+            </div>
+        </div>
+        <button type="button" class="btn btn-outline-secondary mt-2" id="add-choice">Добавить вариант</button>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Создать опрос</button>
+</form>
+
+{% block extra_head %}
+<style>
+    .remove-choice {
+        margin-left: 10px;
+    }
+</style>
+{% endblock %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const addBtn = document.getElementById('add-choice');
+        const container = document.getElementById('choice-fields');
+
+        addBtn.addEventListener('click', function () {
+            const newField = document.createElement('div');
+            newField.className = 'input-group mb-2';
+            newField.innerHTML = `
+                <input type="text" name="choices" class="form-control" placeholder="Вариант ответа">
+                <button type="button" class="btn btn-danger remove-choice">✖</button>
+            `;
+            container.appendChild(newField);
+        });
+
+        container.addEventListener('click', function (e) {
+            if (e.target.classList.contains('remove-choice')) {
+                e.target.parentElement.remove();
+            }
+        });
+    });
+</script>
+
+{% endblock %}
