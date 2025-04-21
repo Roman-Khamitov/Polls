@@ -11,9 +11,6 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 import os
 from pathlib import Path
-from dotenv import load_dotenv
-
-load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -78,12 +75,8 @@ WSGI_APPLICATION = 'pollis_project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',  # Указываем PostgreSQL
-        'NAME': os.environ.get('DB_NAME', 'default_db_name'),  # Название базы данных
-        'USER': os.environ.get('DB_USER', 'default_db_user'),  # Имя пользователя
-        'PASSWORD': os.environ.get('DB_PASSWORD', 'default_db_password'),  # Пароль
-        'HOST': os.environ.get('DB_HOST', 'localhost'),  # Адрес хоста
-        'PORT': os.environ.get('DB_PORT', '5432'),  # Порт (по умолчанию 5432 для PostgreSQL)
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
